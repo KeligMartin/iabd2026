@@ -26,6 +26,25 @@ public class Main {
         logList.add(log);
         logList.add(log2);
 
+        List<Log> successfulLogs = new ArrayList<>();
+        List<Log> errorLogs = new ArrayList<>();
+        int successCount = 0;
 
+        for (int i = 0; i < logList.size(); i++) {
+            if (logList.get(i).isSuccess()) {
+                successCount++;
+                successfulLogs.add(logList.get(i));
+            }
+        }
+
+        for (Log currentLog : logList) {
+            if(currentLog.isError()) {
+                errorLogs.add(currentLog);
+            }
+        }
+
+        System.out.println(successfulLogs);
+        System.out.println(successCount);
+        System.out.println(errorLogs);
     }
 }
