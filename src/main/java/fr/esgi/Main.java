@@ -4,8 +4,7 @@ package fr.esgi;
 import fr.esgi.log.CRITICITY;
 import fr.esgi.log.Log;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
 
@@ -27,24 +26,24 @@ public class Main {
         logList.add(log2);
 
         List<Log> successfulLogs = new ArrayList<>();
+
         List<Log> errorLogs = new ArrayList<>();
-        int successCount = 0;
+        Set<Log> logsUniques = new HashSet<>();
+        logsUniques.add(log);
+        logsUniques.add(log2);
+        logsUniques.add(log);
 
-        for (int i = 0; i < logList.size(); i++) {
-            if (logList.get(i).isSuccess()) {
-                successCount++;
-                successfulLogs.add(logList.get(i));
-            }
+
+
+
+        Map<CRITICITY, Integer> logByCriticity = new HashMap<>();
+
+        // Ajouter 5 logs différents à la liste
+        // faire en sorte que la map fonctionne pour de vrai
+        for(Log current : logList) {
+            logByCriticity.put(current.getCriticity(), 1);
         }
 
-        for (Log currentLog : logList) {
-            if(currentLog.isError()) {
-                errorLogs.add(currentLog);
-            }
-        }
-
-        System.out.println(successfulLogs);
-        System.out.println(successCount);
-        System.out.println(errorLogs);
+        System.out.println(logByCriticity);
     }
 }
