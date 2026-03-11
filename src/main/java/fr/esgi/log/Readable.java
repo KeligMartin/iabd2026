@@ -15,4 +15,8 @@ public abstract class Readable {
     public void setBody(String body) {
         this.body = body;
     }
+
+    public Integer getStatus() {
+        return 500;
+    }
 }

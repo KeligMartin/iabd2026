@@ -8,12 +8,10 @@ public class Log<T extends Readable> implements ILog {
     private T source;
     private CRITICITY criticity;
     private LocalDateTime timestamp;
-    private Integer status;
 
-    public Log(CRITICITY criticity, LocalDateTime timestamp, Integer status, T source) {
+    public Log(CRITICITY criticity, LocalDateTime timestamp, T source) {
         this.criticity = criticity;
         this.timestamp = timestamp;
-        this.status = status;
         this.source = source;
     }
 
@@ -41,11 +39,7 @@ public class Log<T extends Readable> implements ILog {
     }
 
     public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
+        return source.getStatus();
     }
 
     @Override
@@ -56,5 +50,11 @@ public class Log<T extends Readable> implements ILog {
     @Override
     public boolean isError() {
         return true;
+    }
+
+    public void triggerException()  {
+        if(this.criticity == CRITICITY.ERROR) {
+            throw new BodyNotReadableException(String.format("Body is not readable: { %s }", this.source.getBody()));
+        }
     }
 }

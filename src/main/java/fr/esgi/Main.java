@@ -12,12 +12,21 @@ public class Main {
     static void main() {
 
         Readable source1 = new Request("Je me connecte");
-        Readable source2 = new Response("Je suis connecté");
+        Readable source2 = new Response("Je suis connecté", 200);
 
-        Log<Readable> log = new Log<>(CRITICITY.INFO, LocalDateTime.now(), 200, source1);
-        Log<Readable> log2 = new Log<>(CRITICITY.ERROR, LocalDateTime.now(), 500, source2);
+        Log<Readable> log = new Log<>(CRITICITY.INFO, LocalDateTime.now(), source1);
+        Log<Readable> log2 = new Log<>(CRITICITY.ERROR, LocalDateTime.now(), source2);
 
-        System.out.println(log.getMessage());
-        System.out.println(log2.getMessage());
+        try {
+            log2.triggerException();
+        } catch (BodyNotReadableException e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            System.out.println("Analyse du body terminée");
+        }
+
+        // 15 minutes pour rédiger l'exception FutureTimestampException
+
     }
 }
