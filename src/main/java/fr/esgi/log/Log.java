@@ -9,10 +9,15 @@ public class Log<T extends Readable> implements ILog {
     private CRITICITY criticity;
     private LocalDateTime timestamp;
 
-    public Log(CRITICITY criticity, LocalDateTime timestamp, T source) {
+    public Log(CRITICITY criticity, T source) {
         this.criticity = criticity;
-        this.timestamp = timestamp;
         this.source = source;
+        try {
+            this.timestamp = this.getTimestamp();
+        } catch (FutureTimestampException exception) {
+            System.out.println(exception.getMessage());
+            this.timestamp = LocalDateTime.now();
+        }
     }
 
     public Log() {
@@ -31,11 +36,10 @@ public class Log<T extends Readable> implements ILog {
     }
 
     public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+        if(source.getTimestamp().isAfter(LocalDateTime.now())) {
+            throw new FutureTimestampException("Timestamp cannot be in the future");
+        }
+        return source.getTimestamp();
     }
 
     public Integer getStatus() {

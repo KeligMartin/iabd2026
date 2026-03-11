@@ -6,6 +6,11 @@ import fr.esgi.log.Readable;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class Main {
 
@@ -13,20 +18,20 @@ public class Main {
 
         Readable source1 = new Request("Je me connecte");
         Readable source2 = new Response("Je suis connecté", 200);
+        Log<Readable> log = new Log<>(CRITICITY.INFO, source1);
+        Log<Readable> log2 = new Log<>(CRITICITY.ERROR, source2);
 
-        Log<Readable> log = new Log<>(CRITICITY.INFO, LocalDateTime.now(), source1);
-        Log<Readable> log2 = new Log<>(CRITICITY.ERROR, LocalDateTime.now(), source2);
+        List<Log<Readable>> logs = List.of(log, log2);
 
-        try {
-            log2.triggerException();
-        } catch (BodyNotReadableException e) {
-            System.out.println(e.getMessage());
-        }
-        finally {
-            System.out.println("Analyse du body terminée");
-        }
+        Consumer<Log<Readable>> printMessage = (Log<Readable> l) -> System.out.println(l.getMessage());
 
-        // 15 minutes pour rédiger l'exception FutureTimestampException
+        Predicate<Log<Readable>> isError = (Log<Readable> l) -> l.getCriticity() == CRITICITY.ERROR;
 
+        logs                                // parcours mes logs
+                .stream()                   // j'ouvre le flux de données
+                .map(Log::getMessage)
+                //.map(l -> l.getMessage()
+                // je transforme un log en message (càd une String)
+                .forEach(String::toUpperCase);
     }
 }
