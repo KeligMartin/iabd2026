@@ -12,6 +12,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static fr.esgi.log.LogGenerator.generateLogs;
+
 public class Main {
 
     static void main() {
@@ -27,11 +29,19 @@ public class Main {
 
         Predicate<Log<Readable>> isError = (Log<Readable> l) -> l.getCriticity() == CRITICITY.ERROR;
 
-        logs                                // parcours mes logs
+        Stream<String> logStream = logs                                // parcours mes logs
                 .stream()                   // j'ouvre le flux de données
-                .map(Log::getMessage)
+                .map(Log::getMessage); // a partir de maintenant on est dans des String
                 //.map(l -> l.getMessage()
                 // je transforme un log en message (càd une String)
-                .forEach(String::toUpperCase);
+
+        List<Log<?>> myLogs = generateLogs(10000000);
+        List<Log<?>> result = new ArrayList<>();
+
+
+        long start = System.currentTimeMillis();
+
+        long end = System.currentTimeMillis();
+        System.out.println("Temps : " + (end - start) + " ms");
     }
 }
