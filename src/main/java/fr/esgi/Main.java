@@ -34,6 +34,7 @@ public class Main {
 
         Predicate<Log<Readable>> isOld = (Log<Readable> l) -> l.getTimestamp().isAfter(LocalDateTime.now().minusDays(30));
 
+
         Map<CRITICITY, List<Log<Readable>>> criticityMap =  logs                                // parcours mes logs
                 .stream()
                 .filter(isOld)
@@ -53,10 +54,18 @@ public class Main {
 
 
         List<Log<?>> myLogs = generateLogs(10000000);
-        List<Log<?>> result = new ArrayList<>();
-
 
         long start = System.currentTimeMillis();
+
+        List<Log<?>> result = myLogs.parallelStream().toList();
+
+        // stream A
+        // stream B
+        // ajoute a la fin
+        // avec le parallele -> ajoute a la fin 2 fois en même temps
+        // arrayoutofboundException
+        // taille de la liste à l'instant T -> 240097
+        // list.add(element, 240872) --> ArrayIndexOutOfBoundsException
 
         long end = System.currentTimeMillis();
         System.out.println("Temps : " + (end - start) + " ms");
